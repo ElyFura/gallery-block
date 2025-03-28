@@ -1,96 +1,53 @@
 <?php
+// Wichtig: Es darf keine Namespace-Deklaration sein!
+// Die Funktion muss im globalen Namespace sein, nicht im App\Http\Controllers Namespace
 
-    /*
-    |---------------------------------------------------------------------------
-    | Best Practices for submitting and validation
-    |---------------------------------------------------------------------------
-    |
-    | This file validates and stores the block form input in the database.
-    |
-    */
-    
-    /*
-    |--------------------------------------------------------------------------|
-    | NOTE:                                                                    |
-    | Everything should be handled within the function handleLinkType().       |
-    | It replaces the backend controller and ensures data is processed and     |
-    | stored correctly.                                                        |
-    |--------------------------------------------------------------------------|
-    */
-    
-    /**
-     * Function Structure:
-     * 
-     * function handleLinkType($request, $linkType) {
-     *     $rules = [];
-     *     $linkData = [];
-     * 
-     *     return ['rules' => $rules, 'linkData' => $linkData];
-     * }
-     * 
-     * 1. Accessing Submitted Data
-     *    - You can access any submitted value via the $request variable.
-     *    - Example: If the form field has name="my_value", you can access it with:
-     *      $request->my_value
-     *    - The same name should be used when validating or storing the input.
-     *
-     * 2. Validating User Input
-     *    - Always validate user input to ensure it's in the expected format.
-     *    - It is recommended to set maximum input lengths.
-     *    - It is not recommended storing large values or files this way.
-     *
-     * 3. Storing Values
-     *    - After validation succeeds, values can be stored in the database.
-     *    - Add any value you want to save to the $linkData array.
-     *    - Predefined values include 'title' and 'link' (can be left empty).
-     *
-     *    Example:
-     *    $linkData = [
-     *        'title' => $request->title,
-     *        'link'  => $request->link
-     *    ];
-     *
-     * 4. Storing Custom Values
-     *    - You can store any amount of custom values in $linkData. These values 
-     *      can be named however you like.
-     *    
-     *    Example:
-     *    $linkData = [
-     *        'title'           => $request->title,
-     *        'custom_value_1'  => $request->something,
-     *        'custom_value_2'  => 'Some Text',
-     *        'custom_value_3'  => $some_var,
-     *        // Add more as needed
-     *        ...
-     *    ];
-     *
-     * 5. Reusing Variables
-     *    - All stored variables can be later accessed on the edit and display pages.
-     */
+// Prüfe, ob die Funktion bereits existiert, um Fehler bei mehreren Aufrufen zu vermeiden
+if (!function_exists('handleLinkType')) {
+	/**
+	 * Handling der Formularverarbeitung für den Gallery Block
+	 */
+	function handleLinkType($request, $linkType) {
+		// Define validation rules
+		$rules = [
+			'title' => [
+				'nullable',
+				'string',
+				'max:255',
+			],
+			'show_title' => [
+				'sometimes',
+				'boolean',
+			],
+			'columns' => [
+				'required',
+				'string',
+			],
+			'images' => [
+				'required',
+				'string',
+				'max:50000',
+			],
+		];
 
-function handleLinkType($request, $linkType) {
-    // Define validation rules
-    // See: https://laravel.com/docs/11.x/validation#available-validation-rules
-    $rules = [
-        'title' => [
-            'required',
-            'string',
-            'max:255',
-            'regex:/^[a-zA-Z0-9._-]+$/',
-        ],
-        'snipped' => [
-            'required',
-            'string',
-            'max:50000',
-        ],
-    ];
+		// Get the title from the request, with fallback to empty string
+		$title = $request->has('title') ? $request->title : '';
 
-    // Prepare the link data
-    $linkData = [
-        'title' => $request->title,
-        'snipped' => $request->snipped,
-        'custom_icon' => 'fa-solid fa-code',
-    ];
+		// Get the show_title flag
+		$showTitle = $request->has('show_title') ? "1" : "0";
 
-    return ['rules' => $rules, 'linkData' => $linkData];
+		// Get the columns setting
+		$columns = $request->columns ?? 'auto';
+
+		// Prepare the link data
+		$linkData = [
+			'title' => $title,
+			'show_title' => $showTitle,
+			'columns' => $columns,
+			'images' => $request->images,
+			'custom_icon' => 'fa-solid fa-images',
+		];
+
+		return ['rules' => $rules, 'linkData' => $linkData];
+	}
 }

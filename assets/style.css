@@ -1,241 +1,136 @@
-figure {
-  margin: 0 auto !important;
-  max-width: 1000px !important;
-  display: block !important;
-  color: #9e9e9e !important;
-  border: 1px solid #111 !important;
-  border-radius: 3px !important;
-  background: rgb(22, 22, 22) !important;
-  margin-bottom: 1rem !important;
+.ls-gallery {
+  width: 100%;
+  max-width: 70%;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  border: solid #fff 2px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
 }
 
-figure figcaption {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-
-  font-family: sans-serif !important;
-  padding: 5px 10px 4px 10px !important;
-  border-bottom: 1px solid #111 !important;
-  border-radius: 3px 3px 0 0 !important;
-  font-weight: bold !important;
-  font-variant: small-caps !important;
-  background: #111 !important;
-  color: #9e9e9e !important;
+.ls-gallery-title {
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 12px;
+  margin: 0;
+  border-bottom: 2px solid #fff;
 }
 
-.cs-button-container {
-  display: flex;
-  gap: 10px;
-}
-.cs-download, .cs-copy {
-  padding: 5px 10px;
-  background-color: #777;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
+/* Standard responsive grid (für "auto") */
+.ls-gallery-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 15px;
 }
 
-.numbers {
-   cursor: context-menu;
-   -webkit-user-select: none;
-	-moz-user-select: none;
-  -ms-user-select: none;
-	user-select: none;
-  box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.5);
+/* Spezifische Spaltenanzahlen */
+.ls-gallery-grid-1 {
+  grid-template-columns: 1fr;
 }
 
-pre,
-pre * {
-  font: normal normal normal 1em/1.4 monaco, courier, monospace !important;
+.ls-gallery-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
 }
 
-pre {
-  font-size: 0.8em !important;
+.ls-gallery-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
 }
 
-pre,
-pre code,
-pre samp {
-  display: block !important;
-  margin: 0 !important;
-  cursor: text !important;
-  border: 0 !important;
+.ls-gallery-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
 }
 
-pre code,
-pre samp {
-  /* enforce white-space for IE7 */
-  white-space: pre;
-  /* enforce word-wrap for mobile safari */
-  word-wrap: normal;
-  padding: 10px;
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-  overflow-x: auto;
-  scrollbar-color: #777 #111 !important;
-  box-shadow: inset 0 1px 0 1px rgba(0, 0, 0, 0.5);
+.ls-gallery-grid-5 {
+  grid-template-columns: repeat(5, 1fr);
 }
 
-
-/* additional focus rules to provide a visual cue */
-
-pre [contenteditable]:focus {
-  border-radius: 0 0 3px 0 !important;
-  background: #fff !important;
-  outline: none !important;
-  background: rgb(22, 22, 22) !important;
-  box-shadow: inset 0 1px 4px 1px rgba(0, 0, 0, 0.5) !important;
+.ls-gallery-grid-6 {
+  grid-template-columns: repeat(6, 1fr);
 }
 
-pre.line-numbers {
-  position: relative !important;
+.ls-gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 1/1;
 }
 
-pre.line-numbers code,
-pre.line-numbers samp {
-  margin-left: 3em !important;
-  border-left: 1px solid #000 !important;
-}
-
-pre.line-numbers > div {
+/* Stelle sicher, dass das Bild innerhalb des Links richtig dargestellt wird */
+.ls-gallery-item a {
   display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
   height: 100%;
-  border-radius: 0 0 0 3px;
+  position: relative;
   overflow: hidden;
-  counter-reset: line;
 }
 
-pre.line-numbers > div > span {
-  display: block;
-  width: 2.5em;
-  padding: 0 0.5em 0 0;
-  text-align: right;
-  color: #777;
-  overflow: hidden;
-  counter-increment: line;
+.ls-gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  cursor: pointer; /* Zeigt an, dass es klickbar ist */
 }
 
-pre.line-numbers > div > span::before {
-  content: counter(line) !important;
+.ls-gallery-item:hover .ls-gallery-image {
+  transform: scale(1.05);
 }
 
-pre.line-numbers > div > span:first-child {
-  margin-top: 10px !important;
+.ls-gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
-pre.line-numbers > div > span:nth-child(odd) {
-  background: #111 !important;
+/* Form styles */
+.gallery-image-item {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
-@media print {
-  pre code {
-    overflow-x: visible;
-    white-space: pre-wrap;
+/* Lightbox Anpassungen */
+.lb-data .lb-caption {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.lb-data .lb-number {
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Überschreibe die festen Spalten-Layouts für kleine Bildschirme */
+  .ls-gallery-grid-4, .ls-gallery-grid-5, .ls-gallery-grid-6 {
+    grid-template-columns: repeat(2, 1fr);
   }
-  pre.line-numbers div {
-    display: none;
+
+  .ls-gallery-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
   }
-  pre.line-numbers > code,
-  pre.line-numbers > samp {
-    margin-left: 0;
+
+  /* Für "auto" auch anpassen */
+  .ls-gallery-container:not([class*='ls-gallery-grid-']) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
   }
 }
 
-code.hljs {
-    padding-top: 10px !important;
-}
-/* double-up the syntax elements for cross-browser RTF-keystroke support */
-
-pre b,
-pre strong {
-  font-weight: normal !important;
-  color: #039 !important;
-}
-
-pre u,
-pre u b,
-pre u strong {
-  text-decoration: none !important;
-  color: #083 !important;
-}
-
-pre i,
-pre em,
-pre i *,
-pre em *,
-pre i * *,
-pre em * * {
-  letter-spacing: -0.1em !important;
-  text-decoration: none !important;
-  font-style: normal !important;
-  color: #c55 !important;
-}
-
-.hljs {
-  color: #a9b7c6;
-  background: rgb(22, 22, 22);
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
-}
-
-.hljs-number,
-.hljs-literal,
-.hljs-symbol,
-.hljs-bullet {
-  color: #FF8040;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-deletion {
-  color: #569CD6;
-}
-
-.hljs-variable,
-.hljs-template-variable,
-.hljs-link {
-  color: #FF8040;
-}
-
-.hljs-comment,
-.hljs-quote {
-  color: #57A64A;
-}
-
-.hljs-meta {
-  color: #D2A8A1;
-}
-
-.hljs-string,
-.hljs-attribute,
-.hljs-addition {
-  color: #FF0000;
-}
-
-.hljs-section,
-.hljs-title,
-.hljs-type {
-  color: #ffc66d;
-}
-
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class {
-  color: #e8bf6a;
-}
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: bold;
+@media (max-width: 480px) {
+  /* Auf sehr kleinen Bildschirmen höchstens 2 Spalten */
+  .ls-gallery-grid-3, .ls-gallery-grid-4, .ls-gallery-grid-5, .ls-gallery-grid-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
