@@ -20,8 +20,24 @@ if (!function_exists('handleLinkType')) {
 				'boolean',
 			],
 			'columns' => [
-				'required',
+				'nullable',
 				'string',
+			],
+			'layout_type' => [
+				'nullable',
+				'string',
+			],
+			'image_shape' => [
+				'nullable',
+				'string',
+			],
+			'lightbox_effect' => [
+				'nullable',
+				'string',
+			],
+			'lazy_load' => [
+				'sometimes',
+				'boolean',
 			],
 			'images' => [
 				'required',
@@ -33,17 +49,25 @@ if (!function_exists('handleLinkType')) {
 		// Get the title from the request, with fallback to empty string
 		$title = $request->has('title') ? $request->title : '';
 
-		// Get the show_title flag
+		// Get boolean flags
 		$showTitle = $request->has('show_title') ? "1" : "0";
+		$lazyLoad = $request->has('lazy_load') ? "1" : "0";
 
-		// Get the columns setting
+		// Get selection options with defaults
+		$layoutType = $request->layout_type ?? 'grid';
 		$columns = $request->columns ?? 'auto';
+		$imageShape = $request->image_shape ?? 'square';
+		$lightboxEffect = $request->lightbox_effect ?? 'fade';
 
 		// Prepare the link data
 		$linkData = [
 			'title' => $title,
 			'show_title' => $showTitle,
+			'layout_type' => $layoutType,
 			'columns' => $columns,
+			'image_shape' => $imageShape,
+			'lightbox_effect' => $lightboxEffect,
+			'lazy_load' => $lazyLoad,
 			'images' => $request->images,
 			'custom_icon' => 'fa-solid fa-images',
 		];

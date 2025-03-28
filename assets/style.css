@@ -1,5 +1,5 @@
 .ls-gallery {
-  width: 100%;
+  width: fit-content;
   max-width: 70%;
   margin-bottom: 20px;
   border-radius: 10px;
@@ -18,7 +18,27 @@
   border-bottom: 2px solid #fff;
 }
 
-/* Standard responsive grid (für "auto") */
+.slick-dotted.slick-slider {
+  margin-bottom: 0px!important;
+}
+
+/* Filter-Buttons */
+.ls-gallery-filters {
+  padding: 15px 15px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.ls-gallery-filters .btn-group {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ls-gallery-filters button {
+  margin: 0 3px 5px;
+}
+
+/* Standard Grid-Layout */
 .ls-gallery-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -51,12 +71,56 @@
   grid-template-columns: repeat(6, 1fr);
 }
 
+/* Grundlegende Bildkarten-Styles */
 .ls-gallery-item {
   position: relative;
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ls-gallery-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Verschiedene Bildformen */
+.ls-gallery-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+/* Square (Standard) */
+.ls-gallery-image-square {
   aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+/* Natural (natürliche Proportionen) */
+.ls-gallery-image-natural {
+  width: 100%;
+  height: auto;
+}
+
+/* Portrait */
+.ls-gallery-image-portrait {
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+/* Landscape */
+.ls-gallery-image-landscape {
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+/* Widescreen */
+.ls-gallery-image-widescreen {
+  aspect-ratio: 16/9;
+  object-fit: cover;
 }
 
 /* Stelle sicher, dass das Bild innerhalb des Links richtig dargestellt wird */
@@ -66,14 +130,8 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-}
-
-.ls-gallery-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-  cursor: pointer; /* Zeigt an, dass es klickbar ist */
+  color: inherit;
+  text-decoration: none;
 }
 
 .ls-gallery-item:hover .ls-gallery-image {
@@ -90,14 +148,93 @@
   padding: 8px 12px;
   font-size: 0.9rem;
   text-align: center;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
 }
 
-/* Form styles */
-.gallery-image-item {
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 15px;
-  background-color: rgba(0, 0, 0, 0.02);
+.ls-gallery-item:hover .ls-gallery-caption {
+  opacity: 1;
+}
+
+/* Carousel-spezifische Styles - VERBESSERT */
+.ls-gallery-carousel-container {
+  /*padding: 15px;*/
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.ls-gallery-carousel {
+  max-width: 600px; /* Begrenzt die maximale Breite des Carousels */
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ls-gallery-carousel-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+.ls-gallery-carousel-slide-inner {
+  padding: 0;
+  position: relative;
+}
+
+.ls-gallery-carousel .ls-gallery-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ls-gallery-carousel .ls-gallery-caption {
+  position: absolute;
+  bottom: 30px; /* Platz für die Punkte lassen */
+}
+
+/* Slick Carousel Anpassungen */
+.ls-gallery-carousel .slick-prev,
+.ls-gallery-carousel .slick-next {
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+}
+
+.ls-gallery-carousel .slick-prev {
+  left: 10px;
+}
+
+.ls-gallery-carousel .slick-next {
+  right: 10px;
+}
+
+.ls-gallery-carousel .slick-prev:before,
+.ls-gallery-carousel .slick-next:before {
+  font-size: 30px;
+  opacity: 0.8;
+  color: white;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.ls-gallery-carousel .slick-dots {
+  bottom: 5px;
+}
+
+.ls-gallery-carousel .slick-dots li button:before {
+  font-size: 10px;
+  color: white;
+  opacity: 0.7;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
+}
+
+.ls-gallery-carousel .slick-dots li.slick-active button:before {
+  color: white;
+  opacity: 1;
+}
+
+/* Verstecktes Slide im Karussell */
+.ls-gallery-carousel-slide.slick-hidden {
+  display: none;
 }
 
 /* Lightbox Anpassungen */
@@ -108,6 +245,14 @@
 
 .lb-data .lb-number {
   font-size: 0.9rem;
+}
+
+/* Form styles */
+.gallery-image-item {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 /* Responsive adjustments */
@@ -125,6 +270,17 @@
   .ls-gallery-container:not([class*='ls-gallery-grid-']) {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
+  }
+
+  /* Filter-Buttons kleiner machen */
+  .ls-gallery-filters button {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  /* Carousel auf mobilen Geräten anpassen */
+  .ls-gallery-carousel {
+    max-width: 100%;
   }
 }
 
