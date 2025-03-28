@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="{{ block_asset('assets/style.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 
 <div class="mb-3">
 	<label for='title' class='form-label'>{{block_text('Gallery Title')}}</label>
@@ -74,7 +73,7 @@
 
 <div class="mb-3">
 	<label class='form-label'>{{block_text('Gallery Images')}}</label>
-	<div class="small text-muted mb-2">{{block_text('Add image URLs and optional captions')}}</div>
+	<div class="small text-muted mb-2">{{block_text('Add image URLs and optional captions. Drag images or use the buttons to reorder.')}}</div>
 
 	<div id="gallery-images-container">
 		@php
@@ -86,7 +85,19 @@
 
 		@foreach($images as $index => $image)
 			<div class="gallery-image-item mb-3" data-index="{{ $index }}">
-				<div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+				<div class="gallery-image-handle">
+					<i class="fa-solid fa-grip-vertical"></i>
+					<span class="position-badge">{{ $index + 1 }}</span>
+				</div>
+
+				<div class="gallery-image-controls">
+					<button type="button" class="btn btn-sm btn-outline-secondary move-up" title="{{block_text('Move Up')}}">
+						<i class="fa-solid fa-arrow-up"></i>
+					</button>
+					<button type="button" class="btn btn-sm btn-outline-secondary move-down" title="{{block_text('Move Down')}}">
+						<i class="fa-solid fa-arrow-down"></i>
+					</button>
+				</div>
 
 				<div class="input-group mb-2">
 					<span class="input-group-text">URL</span>
@@ -118,12 +129,11 @@
 		@endforeach
 	</div>
 
-	<button type="button" class="btn btn-primary" id="gallery-add-image">
+	<button type="button" class="btn btn-primary mt-2" id="gallery-add-image">
 		<i class="fa-solid fa-plus"></i> {{block_text('Add Another Image')}}
 	</button>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
 	$(document).ready(function() {
 		// Zeige/Verstecke Layout-spezifische Optionen
@@ -138,19 +148,61 @@
 			}
 		});
 
-		// Sortierbare Bilder
-		$('#gallery-images-container').sortable({
-			handle: '.drag-handle',
-			placeholder: 'sortable-placeholder',
-			tolerance: 'pointer'
+		// Aktualisiere Positions-Badges
+		function updatePositionBadges() {
+			$('.gallery-image-item').each(function(index) {
+				$(this).attr('data-index', index);
+				$(this).find('.position-badge').text(index + 1);
+
+				// Aktiviere/Deaktiviere Auf/Ab-Buttons je nach Position
+				$(this).find('.move-up').prop('disabled', index === 0);
+				$(this).find('.move-down').prop('disabled', index === $('.gallery-image-item').length - 1);
+			});
+		}
+
+		// Nach oben verschieben
+		$('#gallery-images-container').on('click', '.move-up', function() {
+			const currentItem = $(this).closest('.gallery-image-item');
+			const prevItem = currentItem.prev('.gallery-image-item');
+
+			if (prevItem.length) {
+				currentItem.insertBefore(prevItem);
+				updatePositionBadges();
+			}
 		});
+
+		// Nach unten verschieben
+		$('#gallery-images-container').on('click', '.move-down', function() {
+			const currentItem = $(this).closest('.gallery-image-item');
+			const nextItem = currentItem.next('.gallery-image-item');
+
+			if (nextItem.length) {
+				currentItem.insertAfter(nextItem);
+				updatePositionBadges();
+			}
+		});
+
+		// Aktualisiere initial die Positionen
+		updatePositionBadges();
 
 		// Add new image fields
 		$('#gallery-add-image').click(function() {
 			const index = $('.gallery-image-item').length;
 			const newItem = `
             <div class="gallery-image-item mb-3" data-index="${index}">
-                <div class="drag-handle"><i class="fa-solid fa-grip-lines"></i></div>
+                <div class="gallery-image-handle">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                    <span class="position-badge">${index + 1}</span>
+                </div>
+
+                <div class="gallery-image-controls">
+                    <button type="button" class="btn btn-sm btn-outline-secondary move-up" title="{{block_text('Move Up')}}">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary move-down" title="{{block_text('Move Down')}}">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </button>
+                </div>
 
                 <div class="input-group mb-2">
                     <span class="input-group-text">URL</span>
@@ -180,6 +232,9 @@
 
 			// Show all remove buttons when we have more than one image
 			$('.gallery-remove-image').show();
+
+			// Aktualisiere die Positions-Badges
+			updatePositionBadges();
 		});
 
 		// Remove image fields
@@ -190,6 +245,9 @@
 			if ($('.gallery-image-item').length <= 1) {
 				$('.gallery-remove-image').hide();
 			}
+
+			// Aktualisiere die Positions-Badges
+			updatePositionBadges();
 		});
 
 		// Handle form submission to collect all image data
@@ -225,24 +283,46 @@
 		position: relative;
 		border: 1px solid #dee2e6;
 		border-radius: 6px;
-		padding: 15px 15px 15px 35px;
+		padding: 15px 15px 15px 45px;
 		background-color: rgba(0, 0, 0, 0.02);
+		margin-bottom: 15px;
 	}
 
-	.drag-handle {
+	.gallery-image-handle {
 		position: absolute;
-		left: 10px;
+		left: 15px;
 		top: 50%;
 		transform: translateY(-50%);
-		cursor: move;
 		color: #6c757d;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
-	.sortable-placeholder {
-		border: 1px dashed #6c757d;
-		margin-bottom: 1rem;
-		height: 140px;
-		border-radius: 6px;
-		background-color: rgba(0, 0, 0, 0.04);
+	.position-badge {
+		display: inline-block;
+		background-color: #6c757d;
+		color: white;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 24px;
+		margin-top: 5px;
+		font-size: 12px;
+	}
+
+	.gallery-image-controls {
+		position: absolute;
+		right: 15px;
+		top: 15px;
+		display: flex;
+		gap: 5px;
+	}
+
+	.gallery-image-controls button {
+		padding: 0.2rem 0.4rem;
+		font-size: 0.75rem;
 	}
 </style>

@@ -71,6 +71,21 @@
   grid-template-columns: repeat(6, 1fr);
 }
 
+/* Masonry-Layout */
+.ls-gallery-masonry {
+  column-gap: 15px;
+  padding: 15px;
+}
+
+/* Das ist der Hauptunterschied zwischen Grid und Masonry */
+.ls-gallery-masonry .ls-gallery-item {
+  break-inside: avoid;
+  margin-bottom: 15px;
+  width: 100%;
+  display: inline-block;
+  height: auto !important; /* Wichtig für Masonry: Höhe wird durch Inhalt bestimmt */
+}
+
 /* Grundlegende Bildkarten-Styles */
 .ls-gallery-item {
   position: relative;
@@ -156,9 +171,9 @@
   opacity: 1;
 }
 
-/* Carousel-spezifische Styles - VERBESSERT */
+/* Carousel-spezifische Styles */
 .ls-gallery-carousel-container {
-  /*padding: 15px;*/
+  padding: 15px;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -232,11 +247,6 @@
   opacity: 1;
 }
 
-/* Verstecktes Slide im Karussell */
-.ls-gallery-carousel-slide.slick-hidden {
-  display: none;
-}
-
 /* Lightbox Anpassungen */
 .lb-data .lb-caption {
   font-size: 1rem;
@@ -272,6 +282,24 @@
     gap: 10px;
   }
 
+  /* Masonry auf mobilen Geräten bleibt Masonry */
+  .ls-gallery-masonry {
+    column-count: 2 !important;
+    column-gap: 10px;
+  }
+
+  /* Hier ist der Unterschied auf mobilen Geräten:
+     - Grid hat Bilder mit gleicher Höhe in einer Reihe
+     - Masonry hat Bilder mit unterschiedlicher Höhe, die ineinandergreifen */
+  .ls-gallery-container .ls-gallery-item {
+    height: auto; /* Grid-Elemente können unterschiedliche Höhen haben */
+  }
+
+  .ls-gallery-masonry .ls-gallery-item {
+    break-inside: avoid; /* Bilder werden nicht zwischen Spalten geteilt */
+    margin-bottom: 10px;
+  }
+
   /* Filter-Buttons kleiner machen */
   .ls-gallery-filters button {
     font-size: 0.8rem;
@@ -285,8 +313,19 @@
 }
 
 @media (max-width: 480px) {
-  /* Auf sehr kleinen Bildschirmen höchstens 2 Spalten */
+  /* Auf sehr kleinen Bildschirmen höchstens 2 Spalten für Grid */
   .ls-gallery-grid-3, .ls-gallery-grid-4, .ls-gallery-grid-5, .ls-gallery-grid-6 {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  /* Masonry auf sehr kleinen Geräten hat 1 Spalte, behält aber den Masonry-Stil */
+  .ls-gallery-masonry {
+    column-count: 1 !important;
+  }
+
+  /* Kleinere Abstände */
+  .ls-gallery-container, .ls-gallery-masonry {
+    padding: 10px;
   }
 }

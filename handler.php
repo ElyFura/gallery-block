@@ -7,7 +7,8 @@ if (!function_exists('handleLinkType')) {
 	/**
 	 * Handling der Formularverarbeitung für den Gallery Block
 	 */
-	function handleLinkType($request, $linkType) {
+	function handleLinkType($request, $linkType): array
+	{
 		// Define validation rules
 		$rules = [
 			'title' => [
